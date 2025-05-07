@@ -37,7 +37,6 @@ def validate_data(values):
     """
     try:
         values =[int(value) for value in values]
-        print(values)
         if len(values) != 6:
             raise ValueError(
                 f"Numbers of values must equal 6. You provided {len(values)}"
@@ -64,12 +63,20 @@ def calculate_surplus_data(sales_row):
     print("calculating surplus data...\n")
     stock = SHEET.worksheet("stock").get_all_values()
     stock_row = stock[-1]
-    print(stock_row)
+    stock_row_int =[int(stock_item) for stock_item in stock_row]
+
+    surplus_data = []
+    for stock, sales in zip(stock_row_int, sales_row):
+        surplus = stock - sales
+        surplus_data.append(surplus)
+
+    return(surplus_data)
+   
 
 def main():
     data = get_sales_data()
     update_sales_worksheet(data)
-    calculate_surplus_data(data)
+    new_surplus_data = calculate_surplus_data(data)
 
 print("WElcome to love sandwiches data automation")
 main()
